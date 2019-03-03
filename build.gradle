@@ -1,0 +1,14 @@
+/************  MAIN ************/
+subprojects {
+	repositories { mavenCentral() }
+	version = '1.0'
+}
+
+task mainClean(dependsOn:[
+	":birj:birjClean",
+	":jettyrunner:jettyrunnerClean"
+]){
+	doFirst{ println("Cleaning All!")}
+	
+	//	dependsOn:'jettyrunner:jettyrunnerClean'
+}

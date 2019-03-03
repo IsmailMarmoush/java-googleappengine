@@ -1,0 +1,88 @@
+/************  Birj ************/
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+
+sourceCompatibility=1.7
+targetCompatibility=1.7
+
+List jettyDep=[
+	'org.eclipse.jetty.aggregate:jetty-all:9.1.1.v20140108',
+	'org.eclipse.jetty:jetty-servlet:9.1.1.v20140108',
+	'org.eclipse.jetty:jetty-jsp:9.1.1.v20140108',
+	'org.eclipse.jetty:jetty-annotations:9.1.1.v20140108',
+	'org.eclipse.jetty:jetty-webapp:9.1.1.v20140108'
+]
+
+List javaWebDep=[
+	'javax:javaee-web-api:7.0',
+	'org.glassfish.web:javax.servlet.jsp.jstl:1.2.1'
+]
+
+List jsonDep=[
+	'org.glassfish:javax.json:1.0.4'
+]
+
+List restDep=[
+	'javax.ws.rs:javax.ws.rs-api:2.0'
+]
+List resteasyDep=[
+	'org.jboss.resteasy:resteasy-servlet-initializer:3.0.6.Final',
+	'org.jboss.resteasy:resteasy-cdi:3.0.6.Final'
+]
+
+List weldDep=[
+	'org.jboss.weld.servlet:weld-servlet:2.1.2.Final'
+]
+
+List testingDep=[
+	'junit:junit:4.11',
+	'org.mockito:mockito-all:1.9.0'
+]
+
+List arquillianDep=[
+	'org.jboss.arquillian.junit:arquillian-junit-container:1.1.2.Final-wildfly-1',
+	'org.jboss.arquillian.container:arquillian-jetty-embedded-9:1.0.0.CR2'
+]
+
+List tyrusClient=[
+	'org.glassfish.tyrus:tyrus-server:1.5',
+	'org.glassfish.tyrus:tyrus-container-grizzly-server:1.5'
+]
+
+dependencies {
+
+	compile javaWebDep
+	compile jsonDep
+	compile restDep
+	compile resteasyDep
+	compile weldDep
+
+	//compile 'org.slf4j:slf4j-api:1.7.5'
+	//compile 'org.slf4j:slf4j-log4j12:1.7.5'
+	compile 'ch.qos.logback:logback-classic:1.1.0'
+	runtime 'org.codehaus.groovy:groovy-all:2.2.1'
+
+	testCompile jettyDep
+	testCompile javaWebDep
+	testCompile testingDep
+	testCompile arquillianDep
+	testCompile tyrusClient
+}
+
+eclipse.classpath.file {
+	/* Classpath entry for Eclipse which changes the order of classpathentries; otherwise no sources for 3rd party jars are shown */
+
+	withXml { xml ->
+		def node = xml.asNode()
+		node.remove( node.find { it.@path == 'org.eclipse.jst.j2ee.internal.web.container' } )
+		node.appendNode( 'classpathentry', [ kind: 'con', path: 'org.eclipse.jst.j2ee.internal.web.container', exported: 'true'])
+	}
+}
+
+task birjClean{
+	println("Cleaning Birj!")
+	cleanEclipse
+	eclipse
+}

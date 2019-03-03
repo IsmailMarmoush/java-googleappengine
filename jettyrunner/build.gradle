@@ -1,0 +1,39 @@
+/************  Jetty Runner  ************/
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+List jettyDep=[
+	'org.eclipse.jetty.aggregate:jetty-all:9.1.1.v20140108',
+	'org.eclipse.jetty:jetty-servlet:9.1.1.v20140108',
+	'org.eclipse.jetty:jetty-jsp:9.1.1.v20140108',
+	'org.eclipse.jetty:jetty-annotations:9.1.1.v20140108',
+	'org.eclipse.jetty:jetty-webapp:9.1.1.v20140108'
+]
+
+List weldDep=[
+	'org.jboss.weld.servlet:weld-servlet:2.1.2.Final'
+]
+
+
+List testingDep=[
+	'junit:junit:4.11',
+	'org.mockito:mockito-all:1.9.0'
+]
+
+dependencies {
+	compile jettyDep
+	compile weldDep
+	//compile 'org.slf4j:slf4j-api:1.7.5'
+	//compile 'org.slf4j:slf4j-log4j12:1.7.5'
+	compile 'ch.qos.logback:logback-classic:1.1.0'
+	runtime 'org.codehaus.groovy:groovy-all:2.2.1'
+
+	testCompile testingDep
+}
+
+task jettyrunnerClean{
+	println("Cleaning JettyRunner!")
+	cleanEclipse
+	eclipse
+}
